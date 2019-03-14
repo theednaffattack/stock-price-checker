@@ -1,7 +1,8 @@
 {
-  "name": "example-create-react-app-express",
+  "name": "stock-price-checker",
   "version": "1.0.0",
   "scripts": {
+    "test": "NODE_ENV=test node -r dotenv/config server.js",
     "start": "NODE_ENV=production node -r dotenv/config server.js",
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "client": "cd client && yarn start",
