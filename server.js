@@ -13,7 +13,7 @@ const runner = require("./test-runner");
 
 const log = console.log;
 
-const port = process.env.REACT_APP_PORT || 7777;
+const port = process.env.PORT || 7777;
 
 app.set("trust proxy", "127.0.0.1");
 
