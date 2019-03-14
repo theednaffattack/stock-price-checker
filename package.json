@@ -4,7 +4,6 @@
   "scripts": {
     "test": "NODE_ENV=test node -r dotenv/config server.js",
     "start": "NODE_ENV=production node -r dotenv/config server.js",
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "client": "cd client && yarn start",
     "server": "nodemon -r dotenv/config server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
