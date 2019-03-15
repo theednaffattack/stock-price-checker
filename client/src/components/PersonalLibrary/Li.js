@@ -11,15 +11,17 @@ class LiItem extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick() {
-    this.props.click(this.props.value);
+    let { title, id, comments } = this.props;
+    let revealObj = {
+      title,
+      id,
+      comments
+    };
+    this.props.click(revealObj);
   }
   render() {
-    let { children, value } = this.props;
-    return (
-      <StyledLi value={value} onClick={this.handleClick}>
-        {children}
-      </StyledLi>
-    );
+    let { children } = this.props;
+    return <StyledLi onClick={this.handleClick}>{children}</StyledLi>;
   }
 }
 

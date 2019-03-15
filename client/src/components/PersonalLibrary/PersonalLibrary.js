@@ -51,7 +51,24 @@ const initialState = {
       _id: "1k666668u7dfg"
     }
   ],
-  reveal: "blahh"
+  reveal: {
+    title: "blasdkfjf",
+    id: "",
+    comments: [
+      {
+        _id: "99999333",
+        text: "this is a comment"
+      },
+      {
+        _id: "77777333",
+        text: "this is another comment"
+      },
+      {
+        _id: "11111111",
+        text: "woo hoooooo, enough to map"
+      }
+    ]
+  }
 };
 
 class PersonalLibrary extends Component {
@@ -74,8 +91,11 @@ class PersonalLibrary extends Component {
       };
     });
   }
-  handleClick(value) {
-    this.setState({ reveal: value });
+  handleClick(obj) {
+    let { id, title, comments } = obj;
+    this.setState({
+      reveal: { id, title, comments }
+    });
   }
   render() {
     let {
@@ -95,7 +115,7 @@ class PersonalLibrary extends Component {
           <Text pb={3} fontSize={[4, 4, 4]}>
             Personal Library
           </Text>
-          {/* <pre>{JSON.stringify(this.state, null, 2)}</pre> */}
+          <pre>{JSON.stringify(this.state, null, 2)}</pre>
           <Flex mx="auto" flexDirection="column" width={1 / 2}>
             <label htmlFor="book-title">Book Title</label>
             <Input
@@ -116,8 +136,9 @@ class PersonalLibrary extends Component {
             {this.state.booksCollection.map(book => (
               <LiItem
                 click={this.handleClick}
-                value={book._id}
                 id={book._id}
+                title={book.title}
+                comments={book.comments}
                 key={Math.random()}
               >
                 {book.title} - {book.comments} comments
@@ -125,7 +146,18 @@ class PersonalLibrary extends Component {
             ))}
           </Ul>
         </Box>
-        <Box>My test book (id: {this.state.reveal})</Box>
+        <Box>
+          {this.state.reveal.title} (id: {this.state.reveal.id})
+        </Box>
+        <Box>
+          {this.state.reveal.comments.length > 1
+            ? this.state.reveal.comments.map((comment, index) => (
+                <Text key={Math.random()}>
+                  {index + 1} - {comment.text}
+                </Text>
+              ))
+            : ""}
+        </Box>
       </Flex>
     );
   }
