@@ -1,15 +1,43 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const app = express();
 const cors = require("cors");
 const internalIp = require("internal-ip");
 const chalk = require("chalk");
 const mongoose = require("mongoose");
 const path = require("path");
+const helmet = require("helmet");
 
 const apiRoutes = require("./routes/api.js");
 const fccTestingRoutes = require("./routes/fcctesting.js");
 const runner = require("./test-runner");
+
+const app = express();
+
+// prevent being used in external iframes
+// Anonymous Message Board
+app.use(helmet.frameguard({ action: "sameorigin" }));
+
+// Sets "Referrer-Policy: same-origin".
+// Nasdaq Stock Price Checker
+app.use(helmet.referrerPolicy({ policy: "same-origin" }));
+
+// Sets "X-XSS-Protection: 1; mode=block".
+// Metric / Imperial converter
+// Issue Tracker
+app.use(helmet.xssFilter());
+
+// Metric / Imperial converter
+app.use(helmet.noSniff());
+
+// Personal Library
+app.use(helmet.noCache());
+
+// Personal Library
+app.use(helmet.hidePoweredBy({ setTo: "PHP 4.2.0" }));
+
+// Sets "X-DNS-Prefetch-Control: off".
+// Anonymous Message Board
+app.use(helmet.dnsPrefetchControl({ allow: false }));
 
 const log = console.log;
 
@@ -83,7 +111,10 @@ var server = app.listen(port, async () => {
     `
   );
 
-  if (process.env.NODE_ENV === "test") {
+  if (
+    process.env.NODE_ENV === "test" ||
+    process.env.NODE_ENV === "production"
+  ) {
     console.log("Running Tests...");
     setTimeout(function() {
       try {

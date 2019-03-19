@@ -9,7 +9,7 @@ const {
   getAllBooks,
   saveBook,
   saveComment
-} = require("./bookFetching");
+} = require("./utils/bookFetching");
 
 module.exports = {
   booksGetController,
@@ -20,11 +20,11 @@ module.exports = {
 
 async function booksGetController(req, res) {
   let { id } = req.params;
+
+  if (id && !id.match(/^[0-9a-fA-F]{24}$/)) {
+    return res.status(200).send("no book exists");
+  }
   if (id === undefined || id === null) {
-    console.log("can't sense req.params.id (/api/books/:id)");
-
-    console.log(req.params);
-
     let allTheBooks = await getAllBooks();
 
     let booksWithCountsAppended = await Promise.all(
@@ -38,7 +38,6 @@ async function booksGetController(req, res) {
     res.status(200).send(booksWithCountsAppended);
   }
   if (id) {
-    console.log("CAN see req.params");
     let [bookToReturn] = await findBook({ id });
     let commentcount = await countComments({ book_id: id });
     bookToReturn.commentcount = commentcount;
@@ -77,29 +76,51 @@ async function booksPostController(req, res) {
   if (id === undefined || id === null) {
     let { title: titleForBook } = req.body;
 
-    let response = await saveBook({ title: titleForBook }).then(data => data);
+    if (titleForBook && titleForBook.length > 0) {
+      let response = await saveBook({ title: titleForBook })
+        .then(data => data)
+        .catch(error => {
+          // console.error(error);
+          return ({ name, path, message } = error);
+        });
 
-    let { _id, title, comments = [] } = response;
+      let { _id, title, comments = [], message } = response;
 
-    let commentcount = await countComments({ book_id: _id });
+      let commentcount = await countComments({ book_id: _id });
 
-    res.status(200).send({
-      _id,
-      title,
-      commentcount,
-      comments
-    });
+      res.status(200).send({
+        _id,
+        title,
+        commentcount,
+        comments
+      });
+    }
+    if (!titleForBook) {
+      res
+        .status(200)
+        .send(
+          "Save validation failed. Expected a `title` field of type String."
+        );
+    }
   }
   if (id) {
     let { book_id, comment } = req.body;
-    let response = await saveComment({ book_id, comment }).then(data => data);
-    let theBook = await findBook({ id: book_id });
-    let { _id, title, comments } = theBook[0];
-    res.status(200).send({
-      _id,
-      title,
-      commentcount: comments.length || 0,
-      comments
-    });
+    let response = await saveComment({ book_id: id, comment }).then(
+      data => data
+    );
+    let theBook = await findBook({ id: id });
+    if (theBook !== "no book exists") {
+      let { _id, title, comments } = theBook[0];
+      res.status(200).send({
+        _id,
+        title,
+        commentcount: comments.length || 0,
+        comments
+      });
+    }
+
+    if (theBook === "no book exists") {
+      res.status(200).send(theBook);
+    }
   }
 }

@@ -1,5 +1,5 @@
-const { Book } = require("../models/Book");
-const { Comment } = require("../models/Comment");
+const { Book } = require("../../models/Book");
+const { Comment } = require("../../models/Comment");
 
 module.exports = {
   countComments,
@@ -27,8 +27,6 @@ function deleteAllBooks() {
   return new Promise((resolve, reject) => {
     Book.remove({}).exec((err, deleteResponse) => {
       if (err) reject(err);
-      console.log("CHECK DELETE RESOPNSE");
-      console.log(deleteResponse);
       resolve(deleteResponse);
     });
   });
@@ -48,8 +46,6 @@ function deleteBook({ _id }) {
     Book.findByIdAndRemove(_id).exec((err, doc) => {
       if (err) reject(err);
       if (!doc) resolve("no book exists");
-      console.log("WAIT A SEC...");
-      console.log(doc);
       resolve("delete successful");
     });
   });
@@ -57,13 +53,20 @@ function deleteBook({ _id }) {
 
 function findBook({ id }) {
   return new Promise((resolve, reject) => {
-    Book.find({ _id: id })
-      .populate({ path: "comments", select: "-createAt -updatedAt" })
-      .lean()
-      .exec((err, doc) => {
-        if (err) reject(err);
-        resolve(doc);
-      });
+    // Yes, it's a valid ObjectId, proceed with `findById` call.
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      Book.find({ _id: id })
+        .populate({ path: "comments", select: "-createAt -updatedAt" })
+        .lean()
+        .exec((err, doc) => {
+          if (err) reject(err);
+          if (!doc) resolve("no book exists");
+          return resolve(doc);
+        });
+    }
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return resolve("no book exists");
+    }
   });
 }
 
@@ -97,11 +100,6 @@ async function saveComment({ book_id, comment }) {
       resolve(doc);
     });
   });
-  console.log("VIEW newComment");
-  console.log(newComment);
-  console.log(newComment._id);
-  console.log(book_id);
-  console.log(comment);
 
   let pushCommentToBook = await new Promise((resolve, reject) => {
     const query = { _id: book_id };
@@ -112,7 +110,5 @@ async function saveComment({ book_id, comment }) {
       resolve(doc);
     });
   });
-  console.log("VIEW pushCommentToBook");
-  console.log(pushCommentToBook);
   return pushCommentToBook;
 }

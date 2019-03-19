@@ -1,6 +1,11 @@
-const { log } = console;
-const { createIssue, updateIssue } = require("./issueFetching");
+const {
+  createIssue,
+  deleteIssue,
+  getAllIssues,
+  updateIssue
+} = require("./utils/issueFetching");
 
+// EXPORTS!!!
 module.exports = {
   deleteIssueController,
   getIssueController,
@@ -8,25 +13,28 @@ module.exports = {
   putIssueController
 };
 
-function deleteIssueController(req, res) {
-  const project = req.params.project;
+async function deleteIssueController(req, res) {
+  const { _id } = req.body;
+  const deleteMessage = await deleteIssue({ _id });
+  res.status(200).send(deleteMessage);
 }
 
-function getIssueController(req, res) {
+async function getIssueController(req, res) {
   const project = req.params.project;
+  const { query } = req;
+  const theIssues = await getAllIssues(project, query);
+  res.status(200).send(theIssues);
 }
+
 async function postIssueController(req, res) {
   const project = req.params.project;
-
-  let reqBody = req.body;
+  const reqBody = req.body;
   reqBody.project = project;
-
-  let newIssue = await createIssue(reqBody);
-
-  return res.status(200).send(newIssue);
+  const newIssue = await createIssue(reqBody);
+  res.status(200).send(newIssue);
 }
 
 async function putIssueController(req, res) {
   const updatedIssue = await updateIssue(req.body);
-  return res.status(200).send(updatedIssue);
+  res.status(200).send(updatedIssue);
 }

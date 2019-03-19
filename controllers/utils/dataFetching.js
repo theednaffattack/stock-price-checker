@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { Stock } = require("../models/Stock");
+const { Stock } = require("../../models/Stock");
 
 const { log } = console;
 

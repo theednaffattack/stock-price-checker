@@ -10,7 +10,7 @@ const {
   getStocks,
   nowMilli,
   saveStock
-} = require("./dataFetching");
+} = require("./utils/dataFetching");
 
 module.exports = async function(req, res) {
   let ip = req.ip;

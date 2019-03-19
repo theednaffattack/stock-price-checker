@@ -24,6 +24,9 @@ const {
   putIssueController
 } = require("../controllers/issueController");
 
+const { getImperialController } = require("../controllers/imperialController");
+
+// EXPORTS!!!
 module.exports = function(app) {
   // Stock Market API
   app.route("/api/stock-prices").get(stockController);
@@ -41,4 +44,7 @@ module.exports = function(app) {
   app.route("/api/issues/:project").get(getIssueController);
   app.route("/api/issues/:project").post(postIssueController);
   app.route("/api/issues/:project").put(putIssueController);
+
+  // Metric / Imperial Converter
+  app.route("/api/convert").get(getImperialController);
 };
