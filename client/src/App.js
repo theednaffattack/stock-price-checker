@@ -7,6 +7,7 @@ import { minHeight, space, width } from "styled-system";
 import Navbar from "./components/Navbar";
 import StockTracker from "./components/StockTracker";
 import PersonalLibrary from "./components/PersonalLibrary";
+import Converter from "./components/Converter";
 import NotFound from "./components/NotFound";
 
 const Style = createGlobalStyle(`
@@ -62,6 +63,7 @@ class App extends Component {
             <Home path="/" />
             <PersonalLibrary path="/library" />
             <StockTracker path="/stocks" />
+            <Converter path="/converter" />
 
             <NotFound default />
           </Router>

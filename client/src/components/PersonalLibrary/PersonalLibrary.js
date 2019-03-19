@@ -249,13 +249,6 @@ class PersonalLibrary extends Component {
                         {index + 1} - {comment.text}
                       </Text>
                     </Box>
-                    <Button
-                      id={comment._id}
-                      commentId={comment._id}
-                      bg="crimson"
-                    >
-                      X
-                    </Button>
                   </Flex>
                 ))
               : ""
