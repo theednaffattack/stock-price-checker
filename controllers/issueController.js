@@ -14,6 +14,8 @@ module.exports = {
 };
 
 async function deleteIssueController(req, res) {
+  console.log("VIEW REQ.BODY");
+  console.log(req.body);
   const { _id } = req.body;
   const deleteMessage = await deleteIssue({ _id });
   res.status(200).send(deleteMessage);

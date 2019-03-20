@@ -10,6 +10,7 @@ const {
 module.exports = { getImperialController };
 
 async function getImperialController(req, res) {
+  console.log("SERVER SIDE");
   let { input } = req.query;
   var matches = /[A-Z]/i.exec(input);
 

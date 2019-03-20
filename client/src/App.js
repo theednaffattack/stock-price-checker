@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import StockTracker from "./components/StockTracker";
 import PersonalLibrary from "./components/PersonalLibrary";
 import Converter from "./components/Converter";
+import IssueTracker from "./components/IssueTracker";
 import NotFound from "./components/NotFound";
 
 const Style = createGlobalStyle(`
@@ -64,6 +65,7 @@ class App extends Component {
             <PersonalLibrary path="/library" />
             <StockTracker path="/stocks" />
             <Converter path="/converter" />
+            <IssueTracker path="/issues" />
 
             <NotFound default />
           </Router>

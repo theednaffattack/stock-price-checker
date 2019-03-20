@@ -29,6 +29,9 @@ const Navbar = () => (
       <Link mx={2} to="converter">
         <Text color="white">Converter</Text>
       </Link>
+      <Link mx={2} to="issues">
+        <Text color="white">Issue Tracker</Text>
+      </Link>
     </Flex>
   </>
 );

@@ -1,6 +1,16 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { requestToApi } from "react-data-fetching";
-import { Button, Text } from "rebass";
+import { Button, Flex, Text } from "rebass";
+import { borders, display, fontSize, width, space } from "styled-system";
+import styled from "styled-components";
+
+const Input = styled.input`
+    ${display}
+    ${borders}
+    ${fontSize}
+    ${width}
+    ${space}
+`;
 
 const initialState = { input: "", response: {} };
 
@@ -40,15 +50,16 @@ export default class Auth extends Component {
   render() {
     const { response } = this.state;
     return (
-      <Fragment>
+      <Flex flexDirection="column">
         <h1>
-          {"Conversion? "}
-          {/* {JSON.stringify(this.state)} */}
-          <label htmlFor="convert">
-            Convert Metric to Imperial units and vice versa
-          </label>
-          <input
+          <Text htmlFor="convert">Convert Metric to Imperial Units</Text>
+          <Text>(and vice versa)</Text>
+          <Input
             type="text"
+            display="block"
+            p={1}
+            fontSize="15px"
+            mx="auto"
             value={this.state.input}
             onChange={this.handleInputChange}
             name="convert"
@@ -57,7 +68,7 @@ export default class Auth extends Component {
           {response.string ? <Text>{response.string}</Text> : ""}
         </h1>
         <Button onClick={this._onSignUp}>Submit</Button>
-      </Fragment>
+      </Flex>
     );
   }
 }
