@@ -111,10 +111,7 @@ var server = app.listen(port, async () => {
     `
   );
 
-  if (
-    process.env.NODE_ENV === "test" ||
-    process.env.NODE_ENV === "production"
-  ) {
+  if (process.env.NODE_ENV === "test") {
     console.log("Running Tests...");
     setTimeout(function() {
       try {
